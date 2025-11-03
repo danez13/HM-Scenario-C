@@ -43,17 +43,9 @@ def fetch_from_api(api_url: str) -> pd.DataFrame:
     _simulate_api_delay()
 
     if "client" in api_url:
-        data = [
-            {"order_id": "C001", "job_date": "2025-10-01", "site": "Alpha HQ", "service_type": "Cleaning", "amount": 1200.50},
-            {"order_id": "C002", "job_date": "2025-10-02", "site": "Beta Plant", "service_type": "Maintenance", "amount": 1500.70},
-            {"order_id": "C003", "job_date": "2025-10-03", "site": "Gamma Office", "service_type": "Security", "amount": 1800.80},
-        ]
+        data = pd.read_csv("data/client_data.csv")
     else:
-        data = [
-            {"job_id":"qwe123","job_date": "2025-10-01", "site": "Alpha Headquarters", "service_type": "Cleaning", "revenue": 1188.50},
-            {"job_id":"fgh789","job_date": "2025-10-02", "site": "Beta Plant", "service_type": "Maintenance", "revenue": 1500.70},
-            {"job_id":"ijk015","job_date": "2025-10-04", "site": "Delta Site", "service_type": "Security", "revenue": 2000.80},
-        ]
+        data = pd.read_csv("data/internal_data.csv")
 
     df = pd.DataFrame(data)
     logging.info(f"Fetched {len(df)} records from {api_url}")

@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import os
 from matching.matcher import reconcile
 from analysis.metrics import summarize_metrics, detect_anomalies, calculate_revenue_variance
 from data.fetcher import load_client_data, load_internal_data
@@ -68,8 +69,16 @@ if not exceptions_df.empty:
     anomalies_df["review_status"] = "pending"  # default reviewer status
 
     # Let the user filter by anomaly type
+    anomaly_filter = st.multiselect(
+        "Filter anomalies by type:",
+        options=anomalies_df["anomaly"].dropna().unique(),
+        default=anomalies_df["anomaly"].dropna().unique()
+    )
 
-    display_df = anomalies_df.dropna(subset=["anomaly"]).reset_index(drop=True)
+    if anomaly_filter:
+        display_df = anomalies_df[anomalies_df["anomaly"].isin(anomaly_filter)]
+    else:
+        display_df = anomalies_df.dropna(subset=["anomaly"]).reset_index(drop=True)
 
     # Use data_editor for inline editing
     edited_anomalies = st.data_editor(
@@ -90,7 +99,7 @@ if not exceptions_df.empty:
     summary = edited_anomalies.groupby("anomaly").agg(
         count=("anomaly", "count")
     ).reset_index()
-    st.dataframe(summary)
+    st.dataframe(summary,hide_index=True)
 
 else:
     st.success(f"All matched rows are within {tolerance:.1f}% variance tolerance.")
