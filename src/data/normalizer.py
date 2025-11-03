@@ -11,8 +11,6 @@ Responsibilities:
 """
 
 import pandas as pd
-import logging
-import os
 
 # matcher.py
 from utils.logger_config import get_logger

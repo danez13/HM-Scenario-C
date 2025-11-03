@@ -12,8 +12,6 @@ Performs deterministic and fuzzy matching between client and internal job record
 import pandas as pd
 from difflib import SequenceMatcher
 from typing import Tuple, List
-import logging
-import os
 
 # matcher.py
 from utils.logger_config import get_logger
