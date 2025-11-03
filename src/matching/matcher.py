@@ -137,18 +137,14 @@ def reconcile(client_df: pd.DataFrame, internal_df: pd.DataFrame, threshold: flo
     if not join_keys:
         raise ValueError("No overlapping columns for matching found between datasets.")
 
-    # Step 1: Deterministic match
     det_matched = deterministic_match(client_df, internal_df, join_keys)
 
-    # Step 2: Fuzzy match on unmatched
     unmatched_client = get_unmatched(client_df, det_matched, join_keys)
     unmatched_internal = get_unmatched(internal_df, det_matched, join_keys)
     fuzzy_matched = fuzzy_match(unmatched_client, unmatched_internal, threshold)
 
-    # Step 3: Combine all matches
     all_matches = pd.concat([det_matched, fuzzy_matched], ignore_index=True)
 
-    # Step 4: Identify remaining unmatched
     matched_client_ids = all_matches.get("order_id", pd.Series(dtype=object)).dropna().unique().tolist()
     matched_internal_ids = all_matches.get("job_id", pd.Series(dtype=object)).dropna().unique().tolist()
 
